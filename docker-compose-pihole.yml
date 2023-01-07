@@ -62,7 +62,6 @@ services:
         --http3
         --tls-crt=/certificates/fullchain.pem
         --tls-key=/certificates/privkey.pem
-        -v -o /dev/stdout
     volumes:
       - /path/to/certificates:/certificates:ro
     networks:

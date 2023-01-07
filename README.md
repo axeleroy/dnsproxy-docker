@@ -13,7 +13,7 @@ variable. Details on the arguments and examples can be found in the
 ### Vanilla Docker
 ```console
 docker run -d \
-  -e "ARGS=-u 8.8.8.8:53 -v -o /dev/stdout" \
+  -e "ARGS=-u 8.8.8.8:53 -u 1.1.1.1:53 --cache" \
   -p 53:53 \
   axeleroy/dnsproxy:latest
 ```
@@ -26,7 +26,7 @@ services:
   dnsproxy:
     image: axeleroy/axeleroy/dnsproxy:latest
     environment:
-      - ARGS=-u 8.8.8.8:53 -v -o /dev/stdout
+      - ARGS=-u 8.8.8.8:53 -u 1.1.1.1:53 --cache 
     ports:
       - "53:53"
 ```
