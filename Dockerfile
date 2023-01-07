@@ -7,5 +7,6 @@ RUN go build -mod=vendor -o /go/bin/dnsproxy .
 
 FROM alpine:3.17.0
 ENV ARGS=""
+RUN apk add --update bind-tools
 COPY --from=builder /go/bin/dnsproxy /
 CMD /dnsproxy ${ARGS}
