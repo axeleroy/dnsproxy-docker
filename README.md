@@ -31,6 +31,12 @@ services:
       - "53:53"
 ```
 
+### DNS-over-TLS and DNS-over-HTTPS with Pi-hole and unbound
+
+I made an [example Docker Compose stack](https://github.com/axeleroy/dnsproxy-docker/blob/main/docker-compose-pihole.yml)
+that shows you how to set up a Pi-hole using unbound as its upstream DNS server with DNS-over-TLS and DNS-over-HTTPS
+capabilities.
+
 ## Building the image
 
 Simply run the `docker build` command and specify the desired version in the `dnsproxy_version` argument.

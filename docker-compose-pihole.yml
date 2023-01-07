@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:2022.12.1
+    depends_on:
+      - unbound
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: "Europe/Paris"
+      WEBPASSWORD: ${PIHOLE_ADMIN_PASSWORD:-password}
+      DNS1: "unbound"
+      DNSMASQ_LISTENING: "all"
+    volumes:
+      - dnsmasq-d:/etc/dnsmasq.d
+      - etc-pihole:/etc/pihole
+    cap_add:
+      - NET_ADMIN
+      - CAP_NET_BIND_SERVICE
+      - CAP_SYS_NICE
+    restart: unless-stopped
+    networks:
+      - pihole-net
+    dns:
+      - 1.1.1.1
+      - 127.0.0.1
+
+  unbound:
+    container_name: unbound
+    image: klutchell/unbound:1.17.0
+    restart: unless-stopped
+    networks:
+      - pihole-net
+    healthcheck:
+      test: ["CMD", "dig", "-p", "53", "dnssec.works", "@127.0.0.1"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+    volumes:
+      # Only needed if you want a custom configuration, the default one is good enough for most people
+      - unbound-config:/etc/unbound/custom.conf.d
+
+  dnsproxy:
+    image: axeleroy/dnsproxy:v0.46.5
+    container_name: dnsproxy
+    depends_on:
+      - pihole
+    restart: unless-stopped
+    ports:
+      - "853:853/tcp"
+      - "443:443/tcp"
+    environment:
+      - ARGS=-u pihole:53
+        --cache
+        --tls-port=853
+        --https-port=443
+        --http3
+        --tls-crt=/certificates/fullchain.pem
+        --tls-key=/certificates/privkey.pem
+        -v -o /dev/stdout
+    volumes:
+      - /path/to/certificates:/certificates:ro
+    networks:
+      - pihole-net
+    healthcheck:
+      test: [ "CMD", "dig", "-p", "53", "dnssec.works", "@127.0.0.1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+
+networks:
+  pihole-net:
+    name: pihole-net
+
+volumes:
+  dnsmasq-d:
+  etc-pihole:
+  unbound-config:
