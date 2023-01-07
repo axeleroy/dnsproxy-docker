@@ -5,7 +5,7 @@ on:
     - cron: '0 1 * * *' # Every day at 01:00
 
 jobs:
-  docker:
+  createtag:
     runs-on: ubuntu-latest
     steps:
       - name: Install curl and jq

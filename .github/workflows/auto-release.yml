@@ -1,0 +1,26 @@
+name: Create release on new tag
+
+on:
+  push:
+    tags:
+      - 'v[0-9].[0-9]+.[0-9]+'
+
+jobs:
+  createrelease:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Install curl and jq
+        run: sudo apt update && sudo apt install -y curl jq
+      - name: Get original release's body and title
+        run: |
+          RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ github.ref_name }}")')
+          echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
+          echo "$RELEASE" | jq -r '("\n" + .body + "Original release: " + .url)' > release_body.md
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          body_path: release_body.md
+          tag_name: ${{ github.ref_name }}
