@@ -29,3 +29,6 @@ jobs:
           build-args: dnsproxy_version=${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/s390x
           tags: axeleroy/dnsproxy:latest,axeleroy/dnsproxy:${{ github.ref_name }}
+          # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

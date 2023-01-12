@@ -1,9 +1,11 @@
-FROM golang:1.19.4 AS builder
+FROM --platform=$BUILDPLATFORM  golang:1.19.4 AS builder
 ARG dnsproxy_version
-WORKDIR /go/src/app
+ARG TARGETOS
+ARG TARGETARCH
 ENV CGO_ENABLED=0
+WORKDIR /go/src/app
 RUN git clone https://github.com/AdguardTeam/dnsproxy.git . --single-branch --branch $dnsproxy_version
-RUN go build -mod=vendor -o /go/bin/dnsproxy .
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -mod=vendor -o /go/bin/dnsproxy .
 
 FROM alpine:3.17.0
 ENV ARGS=""
