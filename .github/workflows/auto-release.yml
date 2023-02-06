@@ -1,12 +1,31 @@
-name: Create release on new tag
+name: Create release on new release from upstream
 
 on:
-  push:
-    tags:
-      - 'v[0-9].[0-9]+.[0-9]+'
+  schedule:
+    - cron: '0 1 * * *' # Every day at 01:00
 
 jobs:
-  createrelease:
+  check_release:
+    name: Check last release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install curl and jq
+        run: sudo apt update && sudo apt install -y curl jq
+      - name: Get latest DNS Proxy tag
+        run: echo "TAG_NAME=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest | jq -r '.tag_name')" >> $GITHUB_ENV
+      - name: Check if tag already exists
+        uses: mukunku/tag-exists-action@v1.2.0
+        id: checkTag
+        with:
+          tag: ${{ env.TAG_NAME }}
+    outputs:
+      tag_already_exists: ${{ steps.checkTag.outputs.exists }}
+      tag: ${{ env.TAG_NAME }}
+  create_release:
+    name: Create release
+    needs:
+      - check_release
+    if: needs.check_release.outputs.tag_already_exists == 'false'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -15,12 +34,38 @@ jobs:
         run: sudo apt update && sudo apt install -y curl jq
       - name: Get original release's body and title
         run: |
-          RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ github.ref_name }}")')
+          RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ needs.check_release.outputs.tag }}")')
           echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
-          echo "$RELEASE" | jq -r '("\n" + .body + "Original release: " + .url)' > release_body.md
+          echo "$RELEASE" | jq -r '("\n\n" + .body + "Original release: " + .url)' > release_body.md
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ env.RELEASE_NAME }}
           body_path: release_body.md
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ needs.check_release.outputs.tag }}
+  publish_docker:
+    name: Publish on Docker Hub
+    needs:
+      - check_release
+    if: needs.check_release.outputs.tag_already_exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          build-args: dnsproxy_version=${{ needs.check_release.outputs.tag }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/s390x
+          tags: axeleroy/dnsproxy:latest,axeleroy/dnsproxy:${{ needs.check_release.outputs.tag }}
+          # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
