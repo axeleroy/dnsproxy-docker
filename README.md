@@ -2,7 +2,7 @@
 A dead-simple, multi-arch Docker image for [AdguardTeam/dnsproxy](https://github.com/AdguardTeam/dnsproxy). Supports DNS-over-TLS, DNS-over-HTTPS, DNS-over-QUIC and DNSCrypt. 
 
 [![Docker Hub](https://img.shields.io/docker/v/axeleroy/dnsproxy?sort=semver&logo=docker)](https://hub.docker.com/r/axeleroy/dnsproxy/tags)
-[![Docker build](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/publish.yml/badge.svg)](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/publish.yml)
+[![Docker build](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml/badge.svg)](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml)
 
 ## Usage
 
