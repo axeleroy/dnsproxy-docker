@@ -1,6 +1,9 @@
 # DNS Proxy Docker
 A dead-simple, multi-arch Docker image for [AdguardTeam/dnsproxy](https://github.com/AdguardTeam/dnsproxy). Supports DNS-over-TLS, DNS-over-HTTPS, DNS-over-QUIC and DNSCrypt. 
 
+[Releases are automated](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml) and published
+in the 24 hours following a new version of DNS Proxy.
+
 [![Docker Hub](https://img.shields.io/docker/v/axeleroy/dnsproxy?sort=semver&logo=docker)](https://hub.docker.com/r/axeleroy/dnsproxy/tags)
 [![Docker build](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml/badge.svg)](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml)
 
@@ -34,8 +37,8 @@ services:
 ### DNS-over-TLS and DNS-over-HTTPS with Pi-hole and unbound
 
 I made an [example Docker Compose stack](https://github.com/axeleroy/dnsproxy-docker/blob/main/docker-compose-pihole.yml)
-that shows you how to set up a Pi-hole using unbound as its upstream DNS server with DNS-over-TLS and DNS-over-HTTPS
-capabilities.
+that shows you how to set up Pi-hole using unbound as its upstream DNS server with DNS-over-TLS and DNS-over-HTTPS
+capabilities (for using your Pi-hole outside your home on your mobile devices).
 
 ## Building the image
 
