@@ -3,7 +3,7 @@ version: '3'
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:2022.12.1
+    image: pihole/pihole:latest
     depends_on:
       - unbound
     ports:
@@ -26,12 +26,12 @@ services:
     networks:
       - pihole-net
     dns:
-      - 1.1.1.1
-      - 127.0.0.1
+      - 1.1.1.1 # Used only to fetch blocklists
+      - 127.0.0.1 # Docker's DNS resolver, used to resolve `unbound`
 
   unbound:
     container_name: unbound
-    image: klutchell/unbound:1.17.0
+    image: klutchell/unbound:latest
     restart: unless-stopped
     networks:
       - pihole-net
@@ -46,7 +46,7 @@ services:
       - unbound-config:/etc/unbound/custom.conf.d
 
   dnsproxy:
-    image: axeleroy/dnsproxy:v0.46.5
+    image: axeleroy/dnsproxy:latest
     container_name: dnsproxy
     depends_on:
       - pihole
@@ -63,11 +63,13 @@ services:
         --tls-crt=/certificates/fullchain.pem
         --tls-key=/certificates/privkey.pem
     volumes:
+      # Certificates can be generated manually or by your reverse proxy (i.e. Caddy or NGINX + Certbot). Update accordingly.
       - /path/to/certificates:/certificates:ro
     networks:
       - pihole-net
     healthcheck:
-      test: [ "CMD", "dig", "-p", "53", "dnssec.works", "@127.0.0.1" ]
+      # Tests DNS-over-TLS, you can change it to DNS-over-HTTPS by replacing "+tls" by "+https"
+      test: [ "CMD", "dig", "+tls", "dnssec.works", "@127.0.0.1" ]
       interval: 30s
       timeout: 30s
       retries: 3
@@ -78,6 +80,6 @@ networks:
     name: pihole-net
 
 volumes:
-  dnsmasq-d:
-  etc-pihole:
-  unbound-config:
+  dnsmasq-d: {}
+  etc-pihole: {}
+  unbound-config: {}
