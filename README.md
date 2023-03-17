@@ -7,7 +7,6 @@ in the 24 hours following a new version of DNS Proxy.
 [![Docker Hub](https://img.shields.io/docker/v/axeleroy/dnsproxy?sort=semver&logo=docker)](https://hub.docker.com/r/axeleroy/dnsproxy/tags)
 [![Docker Hub](https://img.shields.io/docker/pulls/axeleroy/dnsproxy?logo=docker)](https://hub.docker.com/r/axeleroy/dnsproxy/tags)
 [![GitHub release](https://img.shields.io/github/v/release/axeleroy/dnsproxy-docker?logo=github&logoColor=959DA5)](https://github.com/axeleroy/dnsproxy-docker/packages)
-[![GitHub release](https://img.shields.io/github/downloads/axeleroy/dnsproxy-docker/total?color=%230b7cbc&logo=github&logoColor=959DA5)](https://github.com/axeleroy/dnsproxy-docker/packages)
 
 [![Docker build](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml/badge.svg)](https://github.com/axeleroy/dnsproxy-docker/actions/workflows/auto-release.yml)
 
