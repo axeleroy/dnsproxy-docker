@@ -58,11 +58,6 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
-        with:
-          images: |
-            axeleroy/dnsproxy
-            ghcr.io/axeleroy/dnsproxy
-          tags: type=semver,pattern={{version}}
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -80,7 +75,11 @@ jobs:
           push: true
           build-args: dnsproxy_version=${{ needs.check_release.outputs.tag }}
           platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/s390x
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: >
+            axeleroy/dnsproxy:latest,
+            axeleroy/dnsproxy:${{ needs.check_release.outputs.tag }},
+            ghcr.io/axeleroy/dnsproxy:latest,
+            ghcr.io/axeleroy/dnsproxy:${{ needs.check_release.outputs.tag }}
           labels: ${{ steps.meta.outputs.labels }}
           # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
           cache-from: type=gha
