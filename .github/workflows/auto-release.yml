@@ -58,6 +58,10 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
+        with:
+          images: |
+            axeleroy/dnsproxy
+            ghcr.io/axeleroy/dnsproxy
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
