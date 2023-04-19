@@ -1,5 +1,3 @@
-# Cannot use golang 1.20 as quic-go is not compatible with it yet
-# Also, upstream builds with Go 1.18, see https://github.com/AdguardTeam/dnsproxy/blob/master/.github/workflows/build.yaml
 FROM --platform=$BUILDPLATFORM  golang:1.20.1 AS builder
 ARG dnsproxy_version
 ARG TARGETOS
