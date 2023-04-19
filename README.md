@@ -30,7 +30,7 @@ docker run -d \
 version: "3"
 services:
   dnsproxy:
-    image: ghcr.io/axeleroy/dnsproxy:latest
+    image: axeleroy/dnsproxy:latest
     environment:
       - ARGS=-u 8.8.8.8:53 -u 1.1.1.1:53 --cache 
     ports:

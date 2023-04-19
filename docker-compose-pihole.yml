@@ -46,7 +46,7 @@ services:
       - unbound-config:/etc/unbound/custom.conf.d
 
   dnsproxy:
-    image: ghcr.io/axeleroy/dnsproxy:latest
+    image: axeleroy/dnsproxy:latest
     container_name: dnsproxy
     depends_on:
       - pihole
