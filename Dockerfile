@@ -7,7 +7,7 @@ WORKDIR /go/src/app
 RUN git clone https://github.com/AdguardTeam/dnsproxy.git . --single-branch --branch $dnsproxy_version
 RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -mod=vendor -o /go/bin/dnsproxy .
 
-FROM alpine:3.17.2
+FROM alpine:3.17.4
 ENV ARGS=""
 RUN apk add --update bind-tools
 COPY --from=builder /go/bin/dnsproxy /
