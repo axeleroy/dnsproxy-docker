@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM  golang:1.20.8 AS builder
+FROM --platform=$BUILDPLATFORM  golang:1.20.11 AS builder
 ARG dnsproxy_version
 ARG TARGETOS
 ARG TARGETARCH
@@ -7,7 +7,7 @@ WORKDIR /go/src/app
 RUN git clone https://github.com/AdguardTeam/dnsproxy.git . --single-branch --branch $dnsproxy_version
 RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /go/bin/dnsproxy .
 
-FROM alpine:3.17.4
+FROM alpine:3.18.4
 ENV ARGS=""
 RUN apk add --update bind-tools
 COPY --from=builder /go/bin/dnsproxy /
