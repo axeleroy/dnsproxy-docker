@@ -14,7 +14,7 @@ jobs:
       - name: Get latest DNS Proxy tag
         run: echo "TAG_NAME=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest | jq -r '.tag_name')" >> $GITHUB_ENV
       - name: Check if tag already exists
-        uses: mukunku/tag-exists-action@v1.4.0
+        uses: mukunku/tag-exists-action@v1.5.0
         id: checkTag
         with:
           tag: ${{ env.TAG_NAME }}
