@@ -1,0 +1,27 @@
+name: CI Build
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install curl and jq
+        run: sudo apt update && sudo apt install -y curl jq
+      - name: Get latest DNS Proxy tag
+        run: echo "TAG_NAME=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest | jq -r '.tag_name')" >> $GITHUB_ENV
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+          build-args: dnsproxy_version=${{ env.TAG_NAME }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/s390x
+          # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
