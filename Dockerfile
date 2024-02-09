@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM  golang:1.21.6 AS builder
+FROM --platform=$BUILDPLATFORM  golang:1.21.7 AS builder
 ARG dnsproxy_version
 ARG TARGETOS
 ARG TARGETARCH
