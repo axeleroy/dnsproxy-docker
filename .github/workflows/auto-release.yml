@@ -22,28 +22,6 @@ jobs:
     outputs:
       tag_already_exists: ${{ steps.checkTag.outputs.exists }}
       tag: ${{ env.TAG_NAME }}
-  create_release:
-    name: Create release
-    needs:
-      - check_release
-    if: needs.check_release.outputs.tag_already_exists == 'false'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Install curl and jq
-        run: sudo apt update && sudo apt install -y curl jq
-      - name: Get original release's body and title
-        run: |
-          RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ needs.check_release.outputs.tag }}")')
-          echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
-          echo "$RELEASE" | jq -r '(.body + "\n---\nOriginal release: " + .html_url)' > release_body.md
-      - name: Create release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: ${{ env.RELEASE_NAME }}
-          body_path: release_body.md
-          tag_name: ${{ needs.check_release.outputs.tag }}
   publish_docker:
     name: Publish on Docker Hub
     needs:
@@ -89,3 +67,26 @@ jobs:
           # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  create_release:
+    name: Create release
+    needs:
+      - check_release
+    if: needs.check_release.outputs.tag_already_exists == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Install curl and jq
+        run: sudo apt update && sudo apt install -y curl jq
+      - name: Get original release's body and title
+        run: |
+          RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ needs.check_release.outputs.tag }}")')
+          echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
+          echo "$RELEASE" | jq -r '(.body + "\n---\nOriginal release: " + .html_url)' > release_body.md
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          body_path: release_body.md
+          tag_name: ${{ needs.check_release.outputs.tag }}
+
