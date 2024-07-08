@@ -26,7 +26,6 @@ jobs:
     name: Publish on Docker Hub
     needs:
       - check_release
-      - create_release
     if: needs.check_release.outputs.tag_already_exists == 'false'
     runs-on: ubuntu-latest
     steps:
@@ -71,6 +70,7 @@ jobs:
     name: Create release
     needs:
       - check_release
+      - publish_docker
     if: needs.check_release.outputs.tag_already_exists == 'false'
     runs-on: ubuntu-latest
     permissions:
