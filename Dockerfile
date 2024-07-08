@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM  golang:1.22.4 AS builder
+FROM --platform=$BUILDPLATFORM  golang:1.22.5 AS builder
 ARG dnsproxy_version
 ARG TARGETOS
 ARG TARGETARCH
@@ -11,4 +11,5 @@ FROM alpine:3.20.1
 ENV ARGS=""
 RUN apk add --update bind-tools
 COPY --from=builder /go/bin/dnsproxy /
+SHELL ["/bin/sh", "-c"]
 CMD /dnsproxy ${ARGS}
