@@ -3,9 +3,24 @@
   "extends": [
     "config:recommended"
   ],
-  "packageRules": [{
-    "managers": ["docker-compose"],
-    "updateTypes": ["pin", "digest"],
-    "enabled": false
-  }]
+  "packageRules": [
+    {
+      "managers": [
+        "docker-compose"
+      ],
+      "updateTypes": [
+        "pin",
+        "digest"
+      ],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    }
+  ]
 }
