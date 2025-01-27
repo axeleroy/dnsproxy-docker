@@ -2,5 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
-  ]
+  ],
+  "packageRules": [{
+    "managers": ["docker-compose"],
+    "updateTypes": ["pin", "digest"],
+    "enabled": false
+  }]
 }
