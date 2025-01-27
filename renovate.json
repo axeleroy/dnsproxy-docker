@@ -5,10 +5,10 @@
   ],
   "packageRules": [
     {
-      "managers": [
+      "matchManagers": [
         "docker-compose"
       ],
-      "updateTypes": [
+      "matchUpdateTypes": [
         "pin",
         "digest"
       ],
