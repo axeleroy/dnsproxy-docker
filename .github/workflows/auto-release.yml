@@ -82,11 +82,13 @@ jobs:
         run: |
           RELEASE=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases | jq '.[] | select(.tag_name == "${{ needs.check_release.outputs.tag }}")')
           echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
-          echo "$RELEASE" | jq -r '(.body + "\n---\nOriginal release: " + .html_url)' > release_body.md
+          echo "$RELEASE" | jq -r '(.body + "\n\n---\n\nOriginal release: " + .html_url)' > release_body.md
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ env.RELEASE_NAME }}
           body_path: release_body.md
+          generate_release_notes: true
+          append_body: true
           tag_name: ${{ needs.check_release.outputs.tag }}
 
