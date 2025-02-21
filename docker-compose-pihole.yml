@@ -22,9 +22,10 @@ services:
       - dnsmasq-d:/etc/dnsmasq.d
       - etc-pihole:/etc/pihole
     cap_add:
-      - NET_ADMIN
+      # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
       - CAP_NET_BIND_SERVICE
       - CAP_SYS_NICE
+      - CAP_SYS_TIME
     restart: unless-stopped
     networks:
       - pihole-net
