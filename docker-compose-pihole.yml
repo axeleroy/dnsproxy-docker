@@ -23,9 +23,12 @@ services:
       - etc-pihole:/etc/pihole
     cap_add:
       # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-      - CAP_NET_BIND_SERVICE
-      - CAP_SYS_NICE
-      - CAP_SYS_TIME
+      - NET_BIND_SERVICE
+      - SYS_NICE
+      - SYS_TIME
+      # Only add these if you intend to use Pi-hole as your DHCP server
+      # - NET_ADMIN
+      # - NET_RAW
     restart: unless-stopped
     networks:
       - pihole-net
