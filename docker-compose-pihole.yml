@@ -11,10 +11,13 @@ services:
       - "53:53/udp"
       - "80:80/tcp"
     environment:
+      # ATTENTION: these environment variables assume you are running Pi-hole v6
       TZ: "Europe/Paris"
-      WEBPASSWORD: ${PIHOLE_ADMIN_PASSWORD:-password}
-      DNS1: "unbound"
-      DNSMASQ_LISTENING: "all"
+      FTLCONF_webserver_api_password: ${PIHOLE_ADMIN_PASSWORD:-password}
+      # Set unbound as the sole upstream DNS resolver
+      FTLCONF_dns_upstreams: "unbound"
+      # Allow Pi-holes DNS to be reached in bridged network mode
+      FTLCONF_dns_listeningMode: "all"
     volumes:
       - dnsmasq-d:/etc/dnsmasq.d
       - etc-pihole:/etc/pihole
@@ -55,8 +58,9 @@ services:
       - "853:853/tcp"
       - "443:443/tcp"
     environment:
+      # Sets Pi-hole as the upstream DNS resolver, enable DoT and DoH
+      # Update paths to the certificate and its private key accordingly
       - ARGS=-u pihole:53
-        --cache
         --tls-port=853
         --https-port=443
         --http3
