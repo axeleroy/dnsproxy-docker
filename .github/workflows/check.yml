@@ -17,7 +17,7 @@ jobs:
         with:
           push: false
           build-args: dnsproxy_version=master
-          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/s390x
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le
           # See https://docs.docker.com/build/ci/github-actions/examples/#github-cache
           cache-from: type=gha
           cache-to: type=gha,mode=max
