@@ -14,7 +14,11 @@ jobs:
         run: sudo apt update && sudo apt install -y curl jq
       - name: Get latest DNS Proxy tag
         id: get_latest_tag
-        run: echo "TAG_NAME=$(curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest | jq -r '.tag_name')" >> $GITHUB_OUTPUT
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            RELEASE=curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest -H "Authorization: Bearer $GH_TOKEN"
+            echo "TAG_NAME=$(echo $RELEASE | jq -r '.tag_name')" >> $GITHUB_OUTPUT
       - name: Check if tag already exists
         uses: mukunku/tag-exists-action@v1.6.0
         id: checkTag
