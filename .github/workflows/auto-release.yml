@@ -17,7 +17,7 @@ jobs:
         env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            RELEASE=curl https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest -H "Authorization: Bearer $GH_TOKEN"
+            RELEASE=$(curl 'https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest' -H "Authorization: Bearer $GH_TOKEN")
             echo "TAG_NAME=$(echo $RELEASE | jq -r '.tag_name')" >> $GITHUB_OUTPUT
       - name: Check if tag already exists
         uses: mukunku/tag-exists-action@v1.6.0
