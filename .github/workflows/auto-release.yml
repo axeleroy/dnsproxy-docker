@@ -20,7 +20,7 @@ jobs:
             RELEASE=$(curl 'https://api.github.com/repos/AdguardTeam/dnsproxy/releases/latest' -H "Authorization: Bearer $GH_TOKEN")
             echo "TAG_NAME=$(echo $RELEASE | jq -r '.tag_name')" >> $GITHUB_OUTPUT
       - name: Check if tag already exists
-        uses: mukunku/tag-exists-action@v1.6.0
+        uses: mukunku/tag-exists-action@v1.7.0
         id: checkTag
         with:
           tag: ${{ steps.get_latest_tag.outputs.TAG_NAME }}
