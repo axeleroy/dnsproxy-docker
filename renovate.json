@@ -1,26 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices"
+    "config:best-practices",
+    ":automergeStableNonMajor"
   ],
   "packageRules": [
     {
-      "matchManagers": [
-        "docker-compose"
+      "matchFileNames": [
+        "docker-compose-pihole.yml"
       ],
       "matchUpdateTypes": [
         "pin",
         "digest"
       ],
       "enabled": false
-    },
-    {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchCurrentVersion": "!/^0/",
-      "automerge": true
     }
   ]
 }
