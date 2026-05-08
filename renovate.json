@@ -6,8 +6,8 @@
   ],
   "packageRules": [
     {
-      "matchFileNames": [
-        "docker-compose-pihole.yml"
+      "matchManagers": [
+        "docker-compose"
       ],
       "matchUpdateTypes": [
         "pin",
