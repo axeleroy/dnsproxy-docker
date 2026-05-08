@@ -4,16 +4,7 @@
     "config:best-practices",
     ":automergeStableNonMajor"
   ],
-  "packageRules": [
-    {
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchUpdateTypes": [
-        "pin",
-        "digest"
-      ],
-      "enabled": false
-    }
+  "ignorePaths": [
+    "docker-compose-pihole.yml"
   ]
 }
