@@ -89,7 +89,7 @@ jobs:
           echo "RELEASE_NAME=$(echo "$RELEASE" | jq -r '.name')" >> $GITHUB_ENV
           echo "$RELEASE" | jq -r '(.body + "\n\n---\n\nOriginal release: " + .html_url)' > release_body.md
       - name: Create release
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
         with:
           name: ${{ env.RELEASE_NAME }}
           body_path: release_body.md
