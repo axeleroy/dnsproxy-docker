@@ -43,7 +43,8 @@ services:
     networks:
       - pihole-net
     healthcheck:
-      test: ["CMD", "dig", "-p", "53", "dnssec.works", "@127.0.0.1"]
+      # Use the drill wrapper binary to reduce the exit codes to 0 or 1 for healthchecks
+      test: ['CMD', 'drill-hc', '@127.0.0.1', 'dnssec.works']
       interval: 30s
       timeout: 30s
       retries: 3
