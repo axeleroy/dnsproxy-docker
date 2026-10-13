@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM  golang:1.27.1@sha256:512690a5660563b57d37ecc31129e7f136e831db2aed24a1dbeb8ad7380dc0fa AS builder
+FROM --platform=$BUILDPLATFORM  golang:1.27.2@sha256:5bc7f572bbaa98885a3a1fd9c0aa76b59e3e14e8628bfc316bbfd0c701e4818c AS builder
 ARG dnsproxy_version
 ARG TARGETOS
 ARG TARGETARCH
